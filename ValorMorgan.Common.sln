@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configuration\Configuration.csproj", "{9E8DBA0B-2300-4674-AC08-BB988222A6A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Error", "Error\Error.csproj", "{31BAB1FE-7B74-4919-92CF-6B5CD0F2E0B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mail", "Mail\Mail.csproj", "{8AA8B9E8-382B-47FA-B0E4-39C3ECC2872D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationValues", "ApplicationValues\ApplicationValues.csproj", "{AC79540F-F844-4903-B325-7863A792C166}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E2F8F086-D5D2-45D6-80E3-4260EA130146}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Tests\UnitTests\UnitTests.csproj", "{774B8EDC-AE6A-4E58-880C-6395914E14A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E8DBA0B-2300-4674-AC08-BB988222A6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E8DBA0B-2300-4674-AC08-BB988222A6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E8DBA0B-2300-4674-AC08-BB988222A6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E8DBA0B-2300-4674-AC08-BB988222A6A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31BAB1FE-7B74-4919-92CF-6B5CD0F2E0B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31BAB1FE-7B74-4919-92CF-6B5CD0F2E0B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31BAB1FE-7B74-4919-92CF-6B5CD0F2E0B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31BAB1FE-7B74-4919-92CF-6B5CD0F2E0B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA8B9E8-382B-47FA-B0E4-39C3ECC2872D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA8B9E8-382B-47FA-B0E4-39C3ECC2872D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA8B9E8-382B-47FA-B0E4-39C3ECC2872D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA8B9E8-382B-47FA-B0E4-39C3ECC2872D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC79540F-F844-4903-B325-7863A792C166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC79540F-F844-4903-B325-7863A792C166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC79540F-F844-4903-B325-7863A792C166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC79540F-F844-4903-B325-7863A792C166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{774B8EDC-AE6A-4E58-880C-6395914E14A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{774B8EDC-AE6A-4E58-880C-6395914E14A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{774B8EDC-AE6A-4E58-880C-6395914E14A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{774B8EDC-AE6A-4E58-880C-6395914E14A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{774B8EDC-AE6A-4E58-880C-6395914E14A8} = {E2F8F086-D5D2-45D6-80E3-4260EA130146}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {461B6667-8370-4422-AC75-AD8A1E796E28}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://devtfs.devqa.farm:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Configuration\\Configuration.csproj
+		SccProjectName1 = Configuration
+		SccLocalPath1 = Configuration
+		SccProjectUniqueName2 = Error\\Error.csproj
+		SccProjectName2 = Error
+		SccLocalPath2 = Error
+		SccProjectUniqueName3 = Mail\\Mail.csproj
+		SccProjectName3 = Mail
+		SccLocalPath3 = Mail
+		SccProjectUniqueName4 = ApplicationValues\\ApplicationValues.csproj
+		SccProjectName4 = ApplicationValues
+		SccLocalPath4 = ApplicationValues
+		SccProjectUniqueName5 = Tests\\UnitTests\\UnitTests.csproj
+		SccProjectTopLevelParentUniqueName5 = ValorMorgan.Common.sln
+		SccProjectName5 = UnitTests
+		SccLocalPath5 = UnitTests
+	EndGlobalSection
+EndGlobal
