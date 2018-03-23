@@ -17,22 +17,22 @@ Provides mapping logic for defining configuration values to a specific desired T
 var cache = new ValueCache();
 
 // Register as required and typeof(string) (string is the default type)
-cache.RegisterValue("<Setting Name Here>");
+cache.RegisterValue("<Setting Name here>");
 
 // Register as required and typeof(int)
-cache.RegisterValue("<Setting Name Here>", typeof(int));
+cache.RegisterValue("<Setting Name here>", typeof(int));
 
 // Register as not required with a default value when not found
 cache.RegisterValue(
-    "<Setting Name Here>",
+    "<Setting Name here>",
     typeof(string),
     isRequired: false,
-    defaultValue: "<Default Value Here>"
+    defaultValue: "<Default Value here>"
 );
 
 // Register with a custom type cast
 cache.RegisterValue(
-    "<Setting Name Here>",
+    "<Setting Name here>",
     typeof(AnyType),
     isRequired: true,
     s => new AnyType(s) // This can be any delegate returning typeof(AnyType)
@@ -42,19 +42,19 @@ cache.RegisterValue(
 ### To get values from the cache ###
 ```csharp
 // Without the type specified, we get an object return
-object setting = cache.GetValue("<Setting Name Here">);
+object setting = cache.GetValue("<Setting Name here">);
 
 // With the type specified, we get that type
-string settingAsString = cache.GetValue<string>("<Setting Name Here>");
-int settingAsInt = cache.GetValue<int>("<Setting Name Here>");
+string settingAsString = cache.GetValue<string>("<Setting Name here>");
+int settingAsInt = cache.GetValue<int>("<Setting Name here>");
 
 // Even any custom type assuming the cache is registerd to handle the custom cast
-var anyType = cache.GetValue<AnyType>("<Setting Name Here>");
+var anyType = cache.GetValue<AnyType>("<Setting Name here>");
 ```
 
 ### If you need to review the registry for a setting ###
 ```csharp
-IValueRegistry registry = cache.GetSettingRegistry("<Setting Name Here>");
+IValueRegistry registry = cache.GetSettingRegistry("<Setting Name here>");
 
 /* IValueRegistry
         Func<string, dynamic> CustomTypeCastFunction { get; set; }
@@ -71,24 +71,24 @@ Shim wrapping around ConfigurationManager from System.Configuration.  Contains l
 
 ### Getting settings ###
 ```csharp
-string setting = ApplicationSettings.AsString("<Setting Name Here>");
-int settingAsInt = ApplicationSettings.AsInt("<Setting Name Here>");
-bool settingAsBool = ApplicationSettings.AsBool("<Setting Name Here>");
+string setting = ApplicationSettings.AsString("<Setting Name here>");
+int settingAsInt = ApplicationSettings.AsInt("<Setting Name here>");
+bool settingAsBool = ApplicationSettings.AsBool("<Setting Name here>");
 
 // Supports template type too though not very extensivly and likely to fail
-var anyType = ApplicationSettings.As<AnyType>("<Setting Name Here>");
+var anyType = ApplicationSettings.As<AnyType>("<Setting Name here>");
 ```
 
 ### Checking settings ###
 ```csharp
 // Check if the setting even exists
-ApplicationSettings.HasKey("<Setting Name Here>");
+ApplicationSettings.HasKey("<Setting Name here>");
 
 // Check if the setting has a value (will also check if the setting exists)
-ApplicationSettings.HasValue("<Setting Name Here>");
+ApplicationSettings.HasValue("<Setting Name here>");
 
 // Throw an exception if the setting is not found
-ApplicationSettings.ThrowExceptionIfKeyNotFound("<Setting Name Here>");
+ApplicationSettings.ThrowExceptionIfKeyNotFound("<Setting Name here>");
 
 // Can also see available keys
 string[] keys = ApplicationSettings.AllKeys;
@@ -100,17 +100,17 @@ NameValueCollection settings = ApplicationSettings.AppSettings;
 ### Getting connection strings ###
 ```csharp
 string connectionString =
-    ConnectionStrings.GetConnectionString("<Connection String Name Here>");
+    ConnectionStrings.GetConnectionString("<Connection String Name here>");
 ```
 
 ### Checking connection strings ###
 ```csharp
 // Check if the connection string exists
-ConnectionStrings.HasConnectionString("<Connection String Name Here>");
+ConnectionStrings.HasConnectionString("<Connection String Name here>");
 
 // Throw an exception if the connection string is not found
 ConnectionStrings.ThrowExceptionIfConnectionStringNotFound(
-    "<Connection String Name Here>"
+    "<Connection String Name here>"
 );
 
 // Can also see the raw view of connection strings
@@ -126,7 +126,7 @@ Common logging utility for both writing messages and exceptions to the Windows E
 
 [Error_1]: https://serilog.net/
 
-### Setting Up the Logger ###
+### Setting up the Logger ###
 ```csharp
 // Via the constructor
 ILogger logger = new Logger(
@@ -211,7 +211,82 @@ Stack Trace:
 
 ---
 ## Mail ##
+Common email functionality for sending emails from anyone to anyone.  Complete with MailMessage support so CC, BCC, priority, and attachments may also be sent.  Will also convert incoming lists / collections of address to a single line for sending properly.
 
+### Setting up the Emailer ###
+
+```csharp
+// Via the constructor
+IEmailer emailer = new Emailer(
+    smtp: "<SMTP Address here>",
+    emailFrom: "<Email From here>",
+    emailTo: "<Email To here>",
+    subject: "<Subject line here>",
+    emailCc: "<Email CC here>",
+    emailBcc: "<Email BCC here>",
+    priority: MailPriority.Normal,
+    attachments: new List<Attachment>()
+);
+
+// Via propery injection
+IEmailer emailer = new Emailer
+{
+    Smtp = "<SMTP Address here>",
+    EmailFrom = "<Email From here>",
+    EmailTo = "<Email To here>",
+    Subject = "<Subject line here>",
+    EmailCc = "<Email CC here>",
+    EmailBcc = "<Email BCC here>",
+    Priority = MailPriority.Normal,
+    Attachments = new List<Attachment>()
+};
+
+// Feel free to mix the above two to your heart's content
+
+// You can also make use of the static emailer
+ValorMorgan.Common.Mail.StaticEmailer;
+```
+
+### Sending Emails ###
+
+```csharp
+var emailer = ... // Setup like above
+
+emailer.SendEmail("<Some body here>");
+
+// Change the subject before sending
+emailer.Subject = "<New subject>";
+emailer.SendEmail("<Some body here>");
+
+// Can also email with the StaticEmailer
+Mail.StaticEmailer.SendEmail(
+    smtp: "<SMTP Address here>",
+    emailFrom: "<Email From here>",
+    emailTo: "<Email To here>",
+    subject: "<Subject line here>",
+    body: "<Some body here>",
+    emailCc: "<Email CC here>",
+    emailBcc: "<Email BCC here>",
+    priority: MailPriority.Normal,
+    attachments: new List<Attachment>()
+);
+
+// There are default values for some settings as well
+Mail.StaticEmailer.SendEmail(
+    smtp: "<SMTP Address here>",
+    emailFrom: "<Email From here>",
+    emailTo: "<Email To here>",
+    subject: "<Subject line here>",
+    body: "<Some body here>"
+    // Rest are defaulted
+);
+
+// If you already created a MailMessage
+Mail.StaticEmailer.SendEmail(
+    smtp: "<SMTP Address here>",
+    message: new MailMessage()
+);
+```
 
 ---
 ## External Libraries Used ##
