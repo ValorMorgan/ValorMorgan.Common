@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>e6c93b70-8ab8-475f-b6b6-1783f15c0fc4</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>Example Web Installer</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug;WebAppTarget=$(SolutionDir)CreditRequestToolkit.UI.MVC\bin;CustomActionBin=$(SolutionDir)CreditRequestToolkit.CustomActions\bin\Debug</DefineConstants>
+    <CompilerAdditionalOptions>-arch x64
+UrlRewriterWebContent.wxs
+WebAppTarget.wxs
+CustomActionBin.wxs</CompilerAdditionalOptions>
+    <LinkerAdditionalOptions>-ext WixUIExtension
+obj\Debug\UrlRewriterWebContent.wixobj
+obj\Debug\WebAppTarget.wixobj
+obj\Debug\CustomActionBin.wixobj</LinkerAdditionalOptions>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License.rtf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CreditRequestToolkit.UI.MVC\CreditRequestToolkit.UI.MVC.csproj">
+      <Name>CreditRequestToolkit.UI.MVC</Name>
+      <Project>{129b45ef-b1a8-43bd-b726-0b3bb6982fd9}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>copy "$(SolutionDir)CreditRequestToolkit.CustomActions\Product.wxs" "$(ProjectDir)Product.wxs"
+
+"$(WIX)\bin\heat.exe" project "$(SolutionDir)CreditRequestToolkit.UI.MVC\CreditRequestToolkit.UI.MVC.csproj" -o "$(ProjectDir)UrlRewriterWebContent.wxs" -pog Content -ag -template fragment -nologo -directoryid WEBTARGET -cg LoadUrlRewriterWebContent
+"$(WIX)\bin\heat.exe" dir "$(SolutionDir)CreditRequestToolkit.UI.MVC\bin" -o "$(ProjectDir)WebAppTarget.wxs" -ag -template fragment -nologo -dr WEBBINTARGET -var var.WebAppTarget -frag -srd -cg LoadWebAppTarget –sreg
+"$(WIX)\bin\heat.exe" dir "$(SolutionDir)CreditRequestToolkit.CustomActions\bin\Debug" -o "$(ProjectDir)CustomActionBin.wxs" -ag -template fragment -nologo -dr CUSTOMACTIONTARGET -var var.CustomActionBin -frag -srd -cg LoadCustomActionBin –sreg</PreBuildEvent>
+  </PropertyGroup>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ConfigurationUpdateInformation>
+  <Products>
+    <Product name="CreditRequestToolkit">
+      <Versions>
+        <Version number="2017.10.0">
+          <Assets>
+            <Asset>
+              <Name>Global Settings</Name>
+              <DefaultFilename>GlobalSettings2.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Data Config</Name>
+              <DefaultFilename>DataConfiguration.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Security Config</Name>
+              <DefaultFilename>EnterpriseSecurityRoles.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Logging Config</Name>
+              <DefaultFilename>LoggingConfiguration.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Logging Dist Config</Name>
+              <DefaultFilename>LoggingDistributorConfiguration.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Settings Key</Name>
+              <DefaultFilename>Settings.key</DefaultFilename>
+              <Extension>key</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+          </Assets>
+          <Actions>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Association Number</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The association number for our association.</Description>
+              <NewValue>45</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Application Name</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The name of the application viewed from the UI.</Description>
+              <NewValue>Credit Request Toolkit</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Company Name</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The name of the company viewed from the UI.</Description>
+              <NewValue>GreenStone FCS</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>File Saving Directory</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The directory Credit Presentations will be saved to.</Description>
+              <NewValue>\\gsapps\CreditRequestToolkit Credit Presentations</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>BDA Historical Year Range</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Number of years back the historical BDA data should extend to.</Description>
+              <NewValue>5</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Default PD Rating</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The default PD Rating to be used if none can be determined.</Description>
+              <NewValue>12</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Document Type</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The document type to search for Credit Action E-Forms.</Description>
+              <NewValue>Credit Action E-Form</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Primary CIF Keyword</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The name of the keyword that contains the Primary CIF.</Description>
+              <NewValue>PRI CIF#</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Transaction ID Keyword</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The name of the keyword that contains the Transaction ID.</Description>
+              <NewValue>LN Credit Committee Transaction #</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Service URL</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Service URL for OnBase.</Description>
+              <NewValue>https://onbaseapp/AppServer/Service.asmx</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Data Source</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Data source for OnBase.</Description>
+              <NewValue>OnBase</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Connection Timeout</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Timeout period before an OnBase call is forcefully closed (in ms).</Description>
+              <NewValue>60000</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>CRM Service URL</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Service URL for CRM (leave blank to use BGM Collaboration default Global setting).</Description>
+              <NewValue></NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Locations Service URL</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Service URL for the Locations Service.</Description>
+              <NewValue>http://bgmapps/BankDataAccess/services/CustomerService.svc/basic</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Send Emails</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Whether or not the system should send emails automatically.</Description>
+              <NewValue>false</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>SMTP</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Secure Mail Transfer Protocol for sending emails.</Description>
+              <NewValue>smtp</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Failure Email To</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The individual or group that failure emails will be sent to (may be separated  by “;”).</Description>
+              <NewValue></NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Failure Email From</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The individual or group that failure emails will be sent from (useful for quick reply to a needed group or person).</Description>
+              <NewValue>ISDAlerts@greenstonefcs.farm</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Failure Email Subject</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Subject line for any failure emails.</Description>
+              <NewValue>Credit Request Toolkit Error Occurred</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Log Source</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The Event Viewer log source for any exception logging.</Description>
+              <NewValue>CreditRequestToolkit</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Log ID</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The arbitrary default ID for exception logs.</Description>
+              <NewValue>1122</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Log Verbose</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Whether to log verbos messages or not.</Description>
+              <NewValue>false</NewValue>
+            </Action>
+          </Actions>
+        </Version>
+      </Versions>
+    </Product>
+  </Products>
+</ConfigurationUpdateInformation>

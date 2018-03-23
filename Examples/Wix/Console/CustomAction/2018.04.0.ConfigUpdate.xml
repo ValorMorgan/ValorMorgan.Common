@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ConfigurationUpdateInformation>
+  <Products>
+    <Product name="OnBase.TaxReturnUploader">
+      <Versions>
+        <Version number="2018.04.0">
+          <Assets>
+            <Asset>
+              <Name>Global Settings</Name>
+              <DefaultFilename>GlobalSettings2.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Data Config</Name>
+              <DefaultFilename>DataConfiguration.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Security Config</Name>
+              <DefaultFilename>EnterpriseSecurityRoles.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Logging Config</Name>
+              <DefaultFilename>LoggingConfiguration.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Logging Dist Config</Name>
+              <DefaultFilename>LoggingDistributorConfiguration.config</DefaultFilename>
+              <Extension>config</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+            <Asset>
+              <Name>Settings Key</Name>
+              <DefaultFilename>Settings.key</DefaultFilename>
+              <Extension>key</Extension>
+              <IsNew>False</IsNew>
+            </Asset>
+          </Assets>
+          <Actions>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Filename Divider</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Section divider used within the Tax Return filename.</Description>
+              <NewValue>_</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Cif Position</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The index of where to find the CIF after dividing the filename (starting at 0).</Description>
+              <NewValue>0</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Name Position</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The index of where to find the Name after dividing the filename (starting at 0).</Description>
+              <NewValue>1</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Tax Year Position</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The index of where to find the Tax Year after dividing the filename (starting at 0).</Description>
+              <NewValue>4</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Supplied By</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Supplied By keyword for OnBase (is a static keyword).</Description>
+              <NewValue>GreenStone</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Root Directory</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The root directory where the Tax Returns are found.</Description>
+              <NewValue>\\onbaseapp\TaxForms</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Error Directory</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The directory where failed files should be placed.</Description>
+              <NewValue>\\onbaseapp\TaxForms\ERROR_FILES</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Email From</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Who emails should be from (in the from field for an email).</Description>
+              <NewValue>onbase@greenstonefcs.com</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Error Email To</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Who error emails should go to (typically a staff inbox).</Description>
+              <NewValue></NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Fatal Email To</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Who fatal emails should go to (typically Service Desk).</Description>
+              <NewValue></NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Send Success Email</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>True / False whether to send success emails or not.</Description>
+              <NewValue>true</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Email Success Subject</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The subject line for a success email (where curly braces with numbers are placeholders for data; should be 2).</Description>
+              <NewValue>A GreenStone prepared tax return for {0} tax year {1} has been uploaded to OnBase</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Email Error Subject</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The subject line for an error email (where curly braces with numbers are placeholders for data; should be 1).</Description>
+              <NewValue>Tax document for {0} failed to upload to OnBase</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Branch Keyword</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>OnBase Keyword for the Branch #.</Description>
+              <NewValue>Branch #</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Cif Keyword</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>OnBase Keyword for the CIF #.</Description>
+              <NewValue>CIF #</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Full Name Keyword</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>OnBase Keyword for the Full Name.</Description>
+              <NewValue>Full Name</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Supplied By Keyword</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>OnBase Keyword for the Supplied By.</Description>
+              <NewValue>Supplied By</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Tax Year Keyword</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>OnBase Keyword for the Tax Year.</Description>
+              <NewValue>Tax Year</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Document Type</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>OnBase document type being submitted.</Description>
+              <NewValue>Tax Return</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase File Type</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>OnBase file type being submitted.</Description>
+              <NewValue>PDF</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Document Link</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The prefix of the link used in the success email.</Description>
+              <NewValue>http://onbase/AppNet/docpop/docpop.aspx?docid=</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Server Url</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Server URL to OnBase (for API use).</Description>
+              <NewValue>https://onbaseapp/AppServer/Service.asmx</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Data Source</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Data source to OnBase (for API use).</Description>
+              <NewValue>OnBase</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>OnBase Connection Timeout</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Connection timeout for long running OnBase requests.</Description>
+              <NewValue>300000</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Verbose Logging</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>True / False whether verbose logging is on.</Description>
+              <NewValue>false</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Event Log Source</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Event Log Source for logging.</Description>
+              <NewValue>TaxReturnUploader</NewValue>
+            </Action>
+
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Task Username</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Who the Task should run as.</Description>
+              <NewValue></NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Task Password</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The password for the user that this task runs as.</Description>
+              <NewValue></NewValue>
+            </Action>
+            <!--<Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Task Daily Interval</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Daily frequency the task should run (1 means every day).</Description>
+              <NewValue>1</NewValue>
+            </Action>-->
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Task Run Interval</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Frequency the task should be run (in seconds).</Description>
+              <NewValue>600</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Task Daily Duration</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>Number of hours a task should be active in a day (0 means always active).</Description>
+              <NewValue>0</NewValue>
+            </Action>
+            <Action>
+              <Type>Context</Type>
+              <Prompt>True</Prompt>
+              <Label>Task Run Duration</Label>
+              <Asset>None</Asset>
+              <NodeXPath></NodeXPath>
+              <Description>The maximum run duration for the task (in seconds).</Description>
+              <NewValue>3600</NewValue>
+              <!-- 1 hour (60 min) -->
+            </Action>
+          </Actions>
+        </Version>
+      </Versions>
+    </Product>
+  </Products>
+</ConfigurationUpdateInformation>

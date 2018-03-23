@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	This document was most recently generated with a T4 template on
+	06/28/2017 15:56:17 by DEVQA\jmorgan.  Direct modifications will not be retained.
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product
+		Id="72860A2A-1EA8-4F6D-B53B-A23B891B4D48"
+		Name="GreenStone FCS CreditRequestToolkit v2017.10.0"
+		Language="1033"
+		Version="17.10.0"
+		Manufacturer="GreenStone FCS"
+		UpgradeCode="7DAAE3C0-AB8A-41FD-8046-28AF00869B59" >
+
+		<Package InstallerVersion="200" Compressed="yes" Platform="x64" InstallScope="perMachine" />
+		<Condition Message="You must be an administrator to install this product.">Privileged</Condition>
+		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="INSTALLDIR" Name="GreenStone FCS">
+					<Directory Id="PRODUCTNAMEFOLDER" Name="CreditRequestToolkit">
+						<Directory Id="VERSIONFOLDER" Name="v2017.10.0">
+					 	<Directory Id="WEBTARGET" Name="Web" >
+					 		<Directory Id="WEBBINTARGET" Name="bin" >
+					 		</Directory>
+					 	</Directory>
+					 	<Directory Id="CUSTOMACTIONTARGET" Name="install" >
+					 	</Directory>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+
+
+			<Feature Id="MainApplication" Title="Main Application" Level="1">
+				<ComponentGroupRef Id="LoadWebAppTarget" />
+				<ComponentGroupRef Id="LoadCustomActionBin" />
+				<ComponentGroupRef Id="LoadUrlRewriterWebContent" />
+			</Feature>
+
+		<CustomAction
+			Id="SetCustomActionDataValue.ExecuteAll"
+			Return="check"
+			Property="ExecuteAll"
+			Value="CUSTOMACTIONTARGET=[CUSTOMACTIONTARGET];WEBTARGET=[WEBTARGET];CONFIGDIR=[CONFIGDIR];WEBBINTARGET=[WEBBINTARGET];Target=[PRODUCTNAMEFOLDER];"
+		/>
+		<CustomAction
+			Impersonate="yes"
+			Id="ExecuteAll"
+			FileKey="fil9D2152A1EA68B92BC211C69C5F618247"
+			Execute="deferred"
+			DllEntry="ExecuteAll"
+		/>
+		<InstallExecuteSequence>
+		  <Custom Action="SetCustomActionDataValue.ExecuteAll" After="InstallFiles">NOT Installed</Custom>
+		  <Custom Action="ExecuteAll" After="SetCustomActionDataValue.ExecuteAll">NOT Installed</Custom>
+		</InstallExecuteSequence>
+		<UIRef Id="MyWixUI_InstallDir" />
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)License.rtf"/>
+	</Product>
+	<Fragment>
+		<UI Id="MyWixUI_InstallDir">
+			<UIRef Id="WixUI_InstallDir" />
+			<UIRef Id="WixUI_ErrorProgressText" />
+			<DialogRef Id="ConfigDirectoryDlg"/>
+
+			<Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConfigDirectoryDlg" Order="4">1</Publish>
+		</UI>
+	</Fragment>
+	<Fragment>
+		<UI>
+			<Dialog Id="ConfigDirectoryDlg" Width="370" Height="270" Title="[ProductName] Setup" NoMinimize="yes">
+			<Control Type="PathEdit" Id="TxtDir" Width="155" Height="15" X="105" Y="57" Property="CONFIGDIR"/>
+			<Control Id="btnDirBrowse" Type="PushButton" Width="56" Height="17" X="260" Y="57" Text="Browse..." >
+				<Publish Property="_BrowseProperty" Value="CONFIGDIR" Order="1">1</Publish>
+				<Publish Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+			</Control>
+			<Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back">
+				<Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
+			</Control>
+			<Control Id="Install" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next">
+				<Publish Event="EndDialog" Value="Return" />
+			</Control>
+			<Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="Cancel">
+				<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+			</Control>
+			<Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="WixUI_Bmp_Banner" />
+			<Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+				<Text>Please enter the configuration path</Text>
+			</Control>
+			<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+			<Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+				<Text>{\WixUI_Font_Title}Configuration Path</Text>
+			</Control>
+			<Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+			</Dialog>
+			<Property Id="CONFIGDIR" Value="c:\"/>
+		</UI>
+	</Fragment>
+
+</Wix>
+
+<!-- Paste the following into your pre-build action
+copy "$(SolutionDir)CreditRequestToolkit.CustomActions\Product.wxs" "$(ProjectDir)Product.wxs"
+
+"$(WIX)\bin\heat.exe" project "$(SolutionDir)CreditRequestToolkit.UI.MVC\CreditRequestToolkit.UI.MVC.csproj" -o "$(ProjectDir)UrlRewriterWebContent.wxs" -pog Content -ag -template fragment -nologo -directoryid WEBTARGET -cg LoadUrlRewriterWebContent
+"$(WIX)\bin\heat.exe" dir "$(SolutionDir)CreditRequestToolkit.UI.MVC\bin" -o "$(ProjectDir)WebAppTarget.wxs" -ag -template fragment -nologo -dr WEBBINTARGET -var var.WebAppTarget -frag -srd -cg LoadWebAppTarget –sreg
+"$(WIX)\bin\heat.exe" dir "$(SolutionDir)CreditRequestToolkit.CustomActions\bin\Debug" -o "$(ProjectDir)CustomActionBin.wxs" -ag -template fragment -nologo -dr CUSTOMACTIONTARGET -var var.CustomActionBin -frag -srd -cg LoadCustomActionBin –sreg
+
+Paste this into the compiler additional parameters
+-arch x64
+UrlRewriterWebContent.wxs
+WebAppTarget.wxs
+CustomActionBin.wxs
+
+paste this into the linker additional parameters
+-ext WixUIExtension
+obj\Debug\UrlRewriterWebContent.wixobj
+obj\Debug\WebAppTarget.wixobj
+obj\Debug\CustomActionBin.wixobj
+
+paste this into your preprocessor variables
+WebAppTarget=$(SolutionDir)CreditRequestToolkit.UI.MVC\bin;CustomActionBin=$(SolutionDir)CreditRequestToolkit.CustomActions\bin\Debug
+
+-->
+

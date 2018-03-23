@@ -1,0 +1,307 @@
+﻿<#@ template language="VB" hostspecific="false" debug="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #><#
+
+'things I'd like to do with this in the future
+	'1. Integrate automated assembly revisions
+	'2. Integrate merge modules
+	'3. Compile some of the code into an assembly instead of being 'compiled' at runtime (Microsoft.VisualStudio.TextTemplating)
+
+
+#>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	This document was most recently generated with a T4 template on
+	<#=Date.Now()#> by <#=System.Security.Principal.WindowsIdentity.GetCurrent.Name() #>.  Direct modifications will not be retained.
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product
+		Id="<#=installerInfo.productId.ToString() #>"
+		Name="<#=installerInfo.ManufacturerName & " " & installerInfo.ProductName & " v20" & installerInfo.VersionCode #>"
+		Language="1033"
+		Version="<#=installerInfo.VersionCode #>"
+		Manufacturer="<#=installerInfo.ManufacturerName #>"
+		UpgradeCode="<#=installerInfo.UpgradeCode.ToString() #>" >
+
+		<Package InstallerVersion="200" Compressed="yes" Platform="x64" InstallScope="perMachine" />
+		<Condition Message="You must be an administrator to install this product.">Privileged</Condition>
+		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="INSTALLDIR" Name="<#=installerInfo.manufacturerName #>">
+<#
+	PushIndent("					")
+	For each dir As FolderMetadata In installerInfo.UnversionedFolders
+		RecursivelyConstructFolderXml(dir)
+	Next
+	PopIndent
+#>
+<# If installerInfo.VersionedFolders.Count() > 0 Then #>
+					<Directory Id="PRODUCTNAMEFOLDER" Name="<#= installerInfo.ProductName #>">
+						<Directory Id="VERSIONFOLDER" Name="v20<#=installerInfo.VersionCode #>">
+<#
+	PushIndent("					  	")
+	For each dir As FolderMetadata In installerInfo.VersionedFolders
+		RecursivelyConstructFolderXml(dir)
+	Next
+	PopIndent
+#>
+						</Directory>
+					</Directory>
+<# End If #>
+				</Directory>
+			</Directory>
+<# If installerInfo.Shortcuts.Count > 0 Then #>
+			<Directory Id="ProgramMenuFolder">
+<# For each sc As ShortcutMetadata In installerInfo.Shortcuts #>
+				<Directory Id="<#=sc.shortcutDirectoryId #>" Name="<#=sc.shortcutFolderName #>" />
+<# Next sc #>
+			</Directory>
+<# End If #>
+		</Directory>
+
+<# If installerInfo.Shortcuts.Count > 0 Then #>
+<# For each sc As ShortcutMetadata In installerInfo.Shortcuts #>
+
+		<DirectoryRef Id="<#=sc.shortcutDirectoryId #>"  >
+			<Component Id="ApplicationShortcut" Guid="<#=sc.ApplicationShortcutGuid #>" >
+				<!-- the following causes an ICE69 warning that I can't figure out how to get around without messing around with the params for heat.exe -->
+				<Shortcut Id="ApplicationStartMenuShortcut" Name="<#=sc.shortcutText #>" Target="[#<#=sc.shortcutTargetFileKey #>]"   />
+				<RemoveFolder Id="<#=sc.ShortcutDirectoryId #>" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="<#=sc.shortcutRegistryKey #>" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+			</Component>
+		</DirectoryRef>
+<# Next sc #>
+<# End If #>
+
+			<Feature Id="MainApplication" Title="Main Application" Level="1">
+<# For each compGroup As DirComponentGroupMetaData In installerInfo.DirComponentGroups #>
+				<ComponentGroupRef Id="Load<#=compGroup.ComponentGroupShortName #>" />
+<# Next #>
+<# For each compGroup As ProjectComponentGroupMetaData In installerInfo.ProjectComponentGroups #>
+				<ComponentGroupRef Id="Load<#=compGroup.ComponentGroupShortName #>" />
+<# Next #>
+<#
+If installerInfo.Shortcuts.Count > 0 Then #>
+
+				<ComponentRef Id="ApplicationShortcut" />
+<# End If #>
+			</Feature>
+
+<#
+for each methodName As String In installerInfo.customActionEntryMethods
+#>
+		<CustomAction
+			Id="SetCustomActionDataValue.<#=methodName #>"
+			Return="check"
+			Property="<#=methodName #>"
+			Value="<#=installerInfo.customActionsData #>"
+		/>
+		<CustomAction
+			Impersonate="yes"
+			Id="<#=methodName #>"
+			FileKey="<#=installerInfo.customActionFileKey #>"
+			Execute="deferred"
+			DllEntry="<#=methodName #>"
+		/>
+<#
+Next
+#>
+<# If installerInfo.CustomActionEntryMethods.Count > 0 Then #>
+		<InstallExecuteSequence>
+<#
+Dim mostRecentMethodName As String = "InstallFiles"
+For each methodName As String In installerInfo.customActionEntryMethods
+#>
+		  <Custom Action="SetCustomActionDataValue.<#=methodName #>" After="<#=mostRecentMethodName #>">NOT Installed</Custom>
+<#
+	mostRecentMethodName = "SetCustomActionDataValue." & methodName
+#>
+		  <Custom Action="<#=methodName #>" After="<#=mostRecentMethodName #>">NOT Installed</Custom>
+<#
+	mostRecentMethodName = methodName
+Next
+#>
+		</InstallExecuteSequence>
+<# End If #>
+<# If Not installerinfo.CollectConfigDir Then #>
+		<UIRef Id="WixUI_InstallDir" />
+<# Else #>
+		<UIRef Id="MyWixUI_InstallDir" />
+<# End If #>
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)License.rtf"/>
+	</Product>
+<# If installerinfo.CollectConfigDir Then #>
+	<Fragment>
+		<UI Id="MyWixUI_InstallDir">
+			<UIRef Id="WixUI_InstallDir" />
+			<UIRef Id="WixUI_ErrorProgressText" />
+			<DialogRef Id="ConfigDirectoryDlg"/>
+
+			<Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConfigDirectoryDlg" Order="4">1</Publish>
+		</UI>
+	</Fragment>
+	<Fragment>
+		<UI>
+			<Dialog Id="ConfigDirectoryDlg" Width="370" Height="270" Title="[ProductName] Setup" NoMinimize="yes">
+			<Control Type="PathEdit" Id="TxtDir" Width="155" Height="15" X="105" Y="57" Property="CONFIGDIR"/>
+			<Control Id="btnDirBrowse" Type="PushButton" Width="56" Height="17" X="260" Y="57" Text="Browse..." >
+				<Publish Property="_BrowseProperty" Value="CONFIGDIR" Order="1">1</Publish>
+				<Publish Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+			</Control>
+			<Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back">
+				<Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
+			</Control>
+			<Control Id="Install" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next">
+				<Publish Event="EndDialog" Value="Return" />
+			</Control>
+			<Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="Cancel">
+				<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+			</Control>
+			<Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="WixUI_Bmp_Banner" />
+			<Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+				<Text>Please enter the configuration path</Text>
+			</Control>
+			<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+			<Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+				<Text>{\WixUI_Font_Title}Configuration Path</Text>
+			</Control>
+			<Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+			</Dialog>
+			<Property Id="CONFIGDIR" Value="c:\"/>
+		</UI>
+	</Fragment>
+<# End If #>
+
+</Wix>
+
+<!-- Paste the following into your pre-build action
+copy "$(SolutionDir)<#=installerInfo.RelativePathToT4Template #>\Product.wxs" "$(ProjectDir)Product.wxs"
+
+<# For each ca As ProjectComponentGroupMetadata In InstallerInfo.ProjectComponentGroups #>
+“$(WIX)\bin\heat.exe” project "$(SolutionDir)<#=ca.RelativeProjectFileName #>" -o "$(ProjectDir)<#=ca.ComponentGroupShortName #>.wxs" -pog Content -ag -template fragment -nologo -directoryid <#=ca.Target #> -cg Load<#=ca.ComponentGroupShortName #>
+<#
+	Next
+	For each ca As DirComponentGroupMetaData In installerInfo.DirComponentGroups
+#>
+“$(WIX)\bin\heat.exe” dir "$(SolutionDir)<#=ca.HarvestedDirectoryRelativePath #>" -o "$(ProjectDir)<#=ca.ComponentGroupShortName #>.wxs" -ag -template fragment -nologo -dr <#=ca.Target #> -var var.<#=ca.ComponentGroupShortName #> -frag -srd -cg Load<#=ca.ComponentGroupShortName #> –sreg
+<# Next #>
+
+Paste this into the compiler additional parameters
+-arch x64
+<# For each ca As ProjectComponentGroupMetaData In installerInfo.ProjectComponentGroups #>
+<#=ca.ComponentGroupShortName #>.wxs
+<# Next #>
+<# For each ca As DirComponentGroupMetaData In installerInfo.DirComponentGroups #>
+<#=ca.ComponentGroupShortName #>.wxs
+<# Next #>
+
+paste this into the linker additional parameters
+-ext WixUIExtension
+<# For each ca As ProjectComponentGroupMetaData In installerInfo.ProjectComponentGroups #>
+obj\Debug\\<#=ca.ComponentGroupShortName #>.wixobj
+<# Next #>
+<# For each ca As DirComponentGroupMetaData In installerInfo.DirComponentGroups #>
+obj\Debug\\<#=ca.ComponentGroupShortName #>.wixobj
+<# Next #>
+
+paste this into your preprocessor variables
+<#
+   Dim nextDelimeter As String = ""
+   For each ca As DirComponentGroupMetaData In installerInfo.DirComponentGroups
+#><#=nextDelimeter #><#=ca.ComponentGroupShortName #>=$(SolutionDir)<#=ca.HarvestedDirectoryRelativePath #><#
+   nextDelimeter = ";"
+Next
+#>
+
+
+-->
+
+<#+
+Public Sub RecursivelyConstructFolderXml(dir as FolderMetadata)
+	WriteLine(String.Format("<Directory Id=""{0}"" Name=""{1}"" >", dir.Id, dir.Name ))
+	For each nested As FolderMetadata In dir.SubFolders
+		PushIndent("	")
+		RecursivelyConstructFolderXml(nested)
+		PopIndent()
+	Next
+	WriteLine("</Directory>")
+End Sub
+
+Public Class InstallerMetadata
+    Public Property ProductId As String
+    Public Property UpgradeCode As String
+    Public Property ProductName As String
+    Public Property VersionCode As String
+    Public Property ManufacturerName As String
+    Public Property CustomActionEntryMethods As New List(of String)
+    Public Property CustomActionFileKey As String
+    Public Property CustomActionsProperties As New Dictionary(of String, String)
+	Public Property RelativePathToT4Template As String
+	Public Property VersionedFolders As New List(Of FolderMetadata)
+	Public Property UnversionedFolders As New List(Of FolderMetadata)
+    Public Property Shortcuts As New List(of ShortcutMetadata)
+	Public Property DirComponentGroups As New List(Of DirComponentGroupMetaData)
+	Public Property ProjectComponentGroups As New List(Of ProjectComponentGroupMetaData)
+
+    Public ReadOnly Property CustomActionsData As String
+        Get
+            Dim sb As New System.Text.StringBuilder()
+            For Each cap As KeyValuePair(of String, String) In CustomActionsProperties
+                sb.Append(cap.Key & "=[" & cap.Value & "];")
+            Next cap
+            Return sb.ToString()
+        End Get
+    End Property
+	Public Property CollectConfigDir As Boolean
+End Class
+
+Public Class ShortcutMetadata
+    Public Property ShortcutTargetFileKey As String
+    Public Property ApplicationShortcutGuid As String
+    Public Property ShortcutText As String
+    Public Property ShortcutFolderName As String
+    Public Property ShortcutDirectoryId As String
+    Public Property ShortcutRegistryKey As String
+End Class
+
+Public Class DirComponentGroupMetaData
+	Public Sub New(harvestedRelativePath As String, shortName As String, target As String)
+		_harvestedDirectoryRelativePath = harvestedRelativePath
+		_componentGroupShortName = shortName
+		_target = target
+	End Sub
+
+	Public Property HarvestedDirectoryRelativePath As String
+	Public Property ComponentGroupShortName As String
+	Public Property Target As String
+End Class
+
+Public Class ProjectComponentGroupMetaData
+	Public Sub New(RelativeProjectFileName As String, shortName As String, target As String)
+		_relativeProjectFileName = RelativeProjectFileName
+		_componentGroupShortName = shortName
+		_target = target
+	End Sub
+
+	Public Property RelativeProjectFileName As String
+	Public Property ComponentGroupShortName As String
+	Public Property Target As String
+End Class
+
+Public Class FolderMetadata
+	Public Sub New(id As String, name As String)
+		_id = id
+		_name = name
+	End Sub
+
+	Public Property Id As String
+	Public Property Name As String
+	Public property SubFolders As New List(Of FolderMetadata)
+End Class
+#>

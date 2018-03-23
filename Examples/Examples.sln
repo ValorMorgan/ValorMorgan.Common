@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2011
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wix", "Wix", "{5032E336-A0FB-47C0-8E62-C03ABB76BBEF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{0FB7DC31-2162-4E36-B92E-C0E5BC33D45F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{91EB213C-C0B4-4AE6-8CA5-8F10DFC191EA}"
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0FB7DC31-2162-4E36-B92E-C0E5BC33D45F} = {5032E336-A0FB-47C0-8E62-C03ABB76BBEF}
+		{91EB213C-C0B4-4AE6-8CA5-8F10DFC191EA} = {5032E336-A0FB-47C0-8E62-C03ABB76BBEF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B91AC69-A139-4092-BD1F-FC4C309C1FF4}
+	EndGlobalSection
+EndGlobal

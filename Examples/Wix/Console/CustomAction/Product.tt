@@ -1,0 +1,70 @@
+﻿<#@ template debug="false" hostspecific="false" language="VB" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".wxs" #>
+<#	'last updated by JRF on 2015-12-07
+	Dim installerInfo As New InstallerMetadata()
+		
+	'RelativePathToT4Template is needed so we know where to copy this template from during the pre-build action on the WiX Project
+	'you can probably just set this to be the name of the folder containing the CustomAction project file, unless you have a strange folder structure
+	installerInfo.RelativePathToT4Template = "Installer\OnBase.TaxReturnUploader.CustomAction"
+	
+	'unless you know what you're doing, always create a new guid for the product id.
+	'more specifically, it should be for each incremental push to DevCS, as well as major pushes.
+	installerInfo.ProductId = "1364D4D6-342C-415B-B8C1-7BBC402E404F"
+	
+	'If you're writing an MSI from scratch, create a new guid below.  
+	'Pratically it wouldn't hurt any to regen it every time, but windows installer links them together behind the scenes somehow if you leave this alone.
+	installerInfo.UpgradeCode = "1E6F454C-124B-41D0-93DA-118982D89126"
+	installerInfo.ProductName = "OnBase.TaxReturnUploader"
+
+	'versioncode:  XX.XX.X
+	installerInfo.VersionCode = "18.04.0"
+	installerInfo.ManufacturerName = "GreenStone FCS"	
+
+	'if you aren't supplying the configdir to the MSI using a command line or bootstrapper, this next value should be true.
+	installerInfo.CollectConfigDir = True
+		
+	'when creating a FolderMetadata object, realize that this is the info that WiX will use to construct the filesystem on the target computer.
+	'you will typically nest them however deeply that you would want.
+	'* The ID is the wix property that we will use to refer to it (eg... BINTARGET).  
+	'* The Name is the actual folder name that will be created on the filesystem (eg bin).
+	installerInfo.VersionedFolders.Add(New FolderMetadata("BINTARGET", "OnBase.TaxReturnUploader"))
+	installerInfo.VersionedFolders.Add(New FolderMetadata("CUSTOMACTIONTARGET", "CustomAction"))
+		
+	'Custom Actions are static methods in your customaction project that you will call during your MSI
+	'they individually need to be decorated with the <CustomAction()> attribute
+	installerInfo.CustomActionEntryMethods = New List(Of String) From {"ExecuteAll"}
+
+	'CustomActionFileKey -- you'll need to retrieve this from your CustomAction wxs file after you build
+	'this key will only be available after you run heat.exe, so every time you modify and execute your wixproj's pre-build action, 
+	'you MAY need to come back here and tamper with this value.
+	installerInfo.CustomActionFileKey = "filD8A2ED9CBA7DD3BAEDEE472C574061F1" 
+
+	'you'll want to selectively pass in some properties to your custom action...    Folder Id's are usually needed
+	installerInfo.CustomActionsProperties.Add("CUSTOMACTIONTARGET", "CUSTOMACTIONTARGET")
+	
+	'you will probably want to supply the location of your deployed content as a configurable value
+	installerInfo.CustomActionsProperties.Add("BINTARGET", "BINTARGET")
+	
+	'you will almost always want configdir
+	installerInfo.CustomActionsProperties.Add("CONFIGDIR", "CONFIGDIR")
+
+	'Necessary parameters for the Installation.ActionLibrary calls
+	installerInfo.CustomActionsProperties.Add("Target", "INSTALLDIR")
+	installerInfo.CustomActionsProperties.Add("ProductVersion", "ProductVersion")
+
+	'Both ProjectComponentGroupMetaData And DirComponentMetaData are similiar In that they both contain properties that are used 
+	'in the construction of the heat.exe commands.  The constructor for DirComponentMetaData takes 3 values
+	' harvestedRelativePath - The relative path of the folder that contains the content
+	' ComponentGroupShortName - this is used to identify the filename for the wxs to be generated
+	' Target - The wix property that identifies the folder 
+
+	installerInfo.DirComponentGroups = New List(Of DirComponentGroupMetaData) From {
+		New DirComponentGroupMetaData("OnBase.TaxReturnUploader\bin\Debug", "ApplicationBin", "BINTARGET"),
+		New DirComponentGroupMetaData("Installer\OnBase.TaxReturnUploader.CustomAction\bin\Debug", "CustomActionBin", "CUSTOMACTIONTARGET")
+	}
+#>
+<#@ include file="Product.ttinclude" #>

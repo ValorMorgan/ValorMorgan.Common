@@ -1,0 +1,76 @@
+﻿<#@ template debug="false" hostspecific="false" language="VB" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".wxs" #>
+<#	'last updated by JRF on 2015-12-07
+	Dim installerInfo As New InstallerMetadata()
+
+	'RelativePathToT4Template is needed so we know where to copy this template from during the pre-build action on the WiX Project
+	'you can probably just set this to be the name of the folder containing the CustomAction project file, unless you have a strange folder structure
+	installerInfo.RelativePathToT4Template = "CreditRequestToolkit.CustomActions"
+
+	'unless you know what you're doing, always create a new guid for the product id.
+	'more specifically, it should be for each incremental push to DevCS, as well as major pushes.
+	installerInfo.ProductId = "72860A2A-1EA8-4F6D-B53B-A23B891B4D48"
+
+	'If you're writing an MSI from scratch, create a new guid below.
+	'Pratically it wouldn't hurt any to regen it every time, but windows installer links them together behind the scenes somehow if you leave this alone.
+	installerInfo.UpgradeCode = "7DAAE3C0-AB8A-41FD-8046-28AF00869B59"
+	installerInfo.ProductName = "CreditRequestToolkit"
+
+	'versioncode:  XX.XX.X
+	installerInfo.VersionCode = "17.10.0"
+	installerInfo.ManufacturerName = "GreenStone FCS"
+
+	'if you aren't supplying the configdir to the MSI using a command line or bootstrapper, this next value should be true.
+	installerInfo.CollectConfigDir = True
+
+	'when creating a FolderMetadata object, realize that this is the info that WiX will use to construct the filesystem on the target computer.
+	'you will typically nest them however deeply that you would want.
+	'* The ID is the wix property that we will use to refer to it (eg... BINTARGET).
+	'* The Name is the actual folder name that will be created on the filesystem (eg bin).
+	Dim webFolder As New FolderMetadata("WEBTARGET", "Web")
+	webFolder.SubFolders.Add(New FolderMetadata("WEBBINTARGET", "bin"))
+	installerInfo.VersionedFolders.Add(webFolder)
+	installerInfo.VersionedFolders.Add(New FolderMetadata("CUSTOMACTIONTARGET", "install"))
+
+	'Custom Actions are static methods in your customaction project that you will call during your MSI
+	'they individually need to be decorated with the <CustomAction()> attribute
+	installerInfo.CustomActionEntryMethods = New List(Of String) From {"ExecuteAll"}
+
+	'CustomActionFileKey -- you'll need to retrieve this from your CustomAction wxs file after you build
+	'this key will only be available after you run heat.exe, so every time you modify and execute your wixproj's pre-build action,
+	'you MAY need to come back here and tamper with this value.
+	installerInfo.CustomActionFileKey = "fil9D2152A1EA68B92BC211C69C5F618247"
+
+	'you'll want to selectively pass in some properties to your custom action...    Folder Id's are usually needed
+	installerInfo.CustomActionsProperties.Add("CUSTOMACTIONTARGET", "CUSTOMACTIONTARGET")
+
+	'you will probably want to supply the location of your deployed content as a configurable value
+	installerInfo.CustomActionsProperties.Add("WEBTARGET", "WEBTARGET")
+
+	'you will almost always want configdir
+	installerInfo.CustomActionsProperties.Add("CONFIGDIR", "CONFIGDIR")
+
+	'Custom Data
+	installerInfo.CustomActionsProperties.Add("WEBBINTARGET", "WEBBINTARGET")
+	installerInfo.CustomActionsProperties.Add("Target", "PRODUCTNAMEFOLDER")
+
+	'Both ProjectComponentGroupMetaData And DirComponentMetaData are similiar In that they both contain properties that are used
+	'in the construction of the heat.exe commands.  The constructor for DirComponentMetaData takes 3 values
+	' harvestedRelativePath - The relative path of the folder that contains the content
+	' ComponentGroupShortName - this is used to identify the filename for the wxs to be generated
+	' Target - The wix property that identifies the folder
+
+	installerInfo.DirComponentGroups = New List(Of DirComponentGroupMetaData) From {
+		New DirComponentGroupMetaData("CreditRequestToolkit.UI.MVC\bin", "WebAppTarget", "WEBBINTARGET"),
+		New DirComponentGroupMetaData("CreditRequestToolkit.CustomActions\bin\Debug", "CustomActionBin", "CUSTOMACTIONTARGET")
+	}
+
+	installerInfo.ProjectComponentGroups = New List(Of ProjectComponentGroupMetaData) From {
+		New ProjectComponentGroupMetaData( "CreditRequestToolkit.UI.MVC\CreditRequestToolkit.UI.MVC.csproj", "UrlRewriterWebContent", "WEBTARGET")
+	}
+#>
+<#@ include file="Product.ttinclude" #>
