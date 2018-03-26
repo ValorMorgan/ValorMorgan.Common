@@ -84,16 +84,20 @@ namespace Installation.CreditRequestToolkit.CustomActions
 
                 Logger.LogInstallProgress("RunThreadedInstall - Setup Active Directory");
                 SetupActiveDirectory();
+                // NOTE: Just sets some logins for the website / app pool
 
                 Logger.LogInstallProgress("RunThreadedInstall - Execute PreInstall Actions");
                 ExecutePreInstallActions(this);
 
                 Logger.LogInstallProgress("RunThreadedInstall - Setup IIS Site");
                 IisAppPoolMaintenance appPoolManager = new IisAppPoolMaintenance();
+                // NOTE: Adds a new App Pool to IIS if the one specified here is not found
                 appPoolManager.AddAppPoolIfNotExists(appPool, aspNetVersion);
+                // NOTE: Adds the directory to the iisSite (typically was Default Site)
                 actionFacade.CreateVirtualDirectory(_config.WebTarget, _config.ProductName, iisSite, aspNetVersion, appPool, allowAnonymousAccess, integratedSecurity, port);
 
                 Logger.LogInstallProgress("RunThreadedInstall - Execute PostInstall Actions");
+                // NOTE: Reads the XML file for this install to open a window prompt with name/value configuration (to update AppSettings)
                 this.ContextActions = configGateway.ProcessConfigurationInstructions();
 
                 ExecutePostInstallActions(this);

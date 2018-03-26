@@ -79,6 +79,7 @@ namespace OnBase.TaxReturnUploader.CustomAction
                 ExecutePreInstallActions(this);
 
                 Logger.LogInstallProgress("RunThreadedInstall - Execute PostInstall Actions");
+                // NOTE: Reads the XML file for this install to open a window prompt with name/value configuration (to update AppSettings)
                 this.ContextActions = configGateway.ProcessConfigurationInstructions();
 
                 ExecutePostInstallActions(this);
